@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Usuario {
+  id String @id @default(uuid())
+  nome	String
+  email	String
+  senha	String
+  movimentacao Movimentacao[]
+}
+
+model Movimentacao {
+  id String @id @default(uuid())
+  id_produto String
+  id_usuario String
+  tipo_movimentacao String
+  quantidade Int
+  data_movimentacao String
+
+  produto Produto @relation(fields: [id_produto], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [id_usuario], references: [id], onDelete: Cascade)
+}
+
+model Produto{
+  id String @id @default(uuid())
+  id_categoria String
+  nome String
+  quantidade Int
+  estoque_minimo Int
+  tensao String
+  dimensoes String
+  resolucao_tela String
+  capacidade_armazenamento String
+  conectividade String
+  movimentacao Movimentacao[]
+
+  categoria Categoria @relation(fields: [id_categoria], references: [id], onDelete: Cascade)
+}
+
+model Categoria{
+  id String @id @default(uuid())
+  nome_categoria String
+  produto Produto[]
+}
